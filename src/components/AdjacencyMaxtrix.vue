@@ -1,6 +1,6 @@
 <template>
     <div id="app-inner">
-        <h1>Interior Design Adjacency Diagram Editor</h1>
+        <h3>Interior Design / Adjacency Diagram Editor</h3>
 
         <div id="editor-wrap">
             <div id="editor-outer" class="row">
@@ -8,15 +8,18 @@
                     <textarea cols="30" rows="8" v-model="rawRooms"></textarea>
                     <p class="description">
                         - Input your room list, one room one line.<br>
-                        - Your work will be saved in your local browser.<br>
+                        - Your work will be auto saved in your local browser or you can download state file and load later.<br>
                         - You want to read <a href="https://carolynjeanmatthews.com/2017/02/07/adjacency-matrix-decoded/">ADJACENCY MATRIX DECODED</a> by Carolyn Jean Matthews
                     </p>
 
-                    <p>
-                        <button @click.prevent="loadSamples">Need a Sample?</button>
-                        <button v-if="rooms.length > 0" @click.prevent="downloadState">Download State</button>
-                    </p>
+                    <div>
+                        <button @click.prevent="loadSamples">Need a sample?</button>
+                    </div>
                     
+                    <div>
+                        <button v-if="rooms.length > 0" @click.prevent="downloadSvg">Download SVG image</button>
+                        <button v-if="rooms.length > 0" @click.prevent="downloadState">Download current state</button>
+                    </div>
                 
                     <div>
                         <label>Load saved state <input type="file" id="file" @change="handleStateFile"></label>
@@ -24,7 +27,7 @@
                 </div>
 
                 <div id="diagram" class="haft">
-                    <svg width="500" height="500">
+                    <svg width="500" height="500" id="svg-image">
                         <g v-for="(r, ri) in modelRooms" :key="'room-'+ri" :transform="r.g.transform" 
                             class="room-wrap"
                             :class="{active: isActive({ r, ri })}"
@@ -50,7 +53,7 @@
                             <StateUndesired v-if="r.state === 'Undesired'" @click="changeState({ r, ri })"/>
                         </g>        
 
-                        <g :transform="`translate(${length * baseLengthUnit + rooms.length * baseLengthUnit + 2 * baseLengthUnit}, 0)`">
+                        <g :transform="`translate(${length * baseLengthUnit + rooms.length * baseLengthUnit + 3 * baseLengthUnit}, 0)`">
                             <g transform="translate(0,0)">
                                 <StatePrimary/>
                                 <text :x="30" :y="15">
@@ -69,7 +72,7 @@
                                 </text>
                                 <line :x1="0" :y1="15/2" :x2="30/Math.SQRT2" :y2="15/2" class="line"></line>
                             </g>
-                        </g>        
+                        </g>     
                     </svg>
                 </div>
             </div>
@@ -83,7 +86,8 @@
         fill: #cacaca;   
     }
     .line {
-        stroke: black;
+        stroke: #000;
+        stroke-width: 1px;
     }
     .triangle {
         stroke: black;
@@ -270,11 +274,15 @@
                     }
                 }
             },
+            createDownloadLink(data, fileName) {
+                let linkEl = document.createElement('a');
+                linkEl.setAttribute("href", data);
+                linkEl.setAttribute("download", fileName);
+                return linkEl;
+            },
             downloadState() {
                 let stateTxt = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.appState));
-                let linkEl = document.createElement('a');
-                linkEl.setAttribute("href", stateTxt);
-                linkEl.setAttribute("download", "adjacency-matrix-diagram.json");
+                let linkEl = this.createDownloadLink(stateTxt, "adjacency-matrix-diagram.json");
                 linkEl.click();
                 linkEl.remove();
             },
@@ -295,6 +303,24 @@
                   input.value = "";
                 };
                 reader.readAsText(input.files[0]);
+            },
+            downloadSvg() {
+                let svg = document.getElementById("svg-image");
+                let serializer = new XMLSerializer();
+                let source = serializer.serializeToString(svg);
+                if(!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                }
+                if(!source.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                }
+                // add css
+                source = source.replace(/id="svg-image">/, 'id="svg-image"><style>circle.state-primary{fill:#000;stroke:#000}circle.state-secondary{fill:#fff;stroke:#000}line{fill:#fff;stroke:#000}.room-wrap text{fill:#cacaca}.line{stroke:#000;stroke-width:1px}.triangle{stroke:#000;fill:#fff}.rect{fill:#fff;stroke:#000;cursor:pointer}.active text{fill:#000}.row{display:-webkit-box;display:-ms-flexbox;display:flex}.haft{width:50%;padding:5px}#editor textarea{width:100%}svg{width:100%}</style>')
+                source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+                source =  'data:text/xml;charset=utf-8,'+encodeURIComponent(source);
+                let linkEl = this.createDownloadLink(source, "adjacency-matrix-diagram.svg"); 
+                linkEl.click();
+                linkEl.remove();
             }
         }
     }

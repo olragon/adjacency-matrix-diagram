@@ -1,8 +1,15 @@
 <template>
     <g>
-        <circle :r="r" :cx="cx" :cy="cy" @click="handleClick"></circle>
+        <circle :r="r" :cx="cx" :cy="cy" @click="handleClick" class="state-primary"></circle>
     </g>
 </template>
+
+<style scoped>
+    circle.state-primary {
+        fill: #000;
+        stroke: #000;
+    }
+</style>
 
 <script>
     export default {

@@ -1,11 +1,11 @@
 <template>
     <g>
-        <circle :r="r" :cx="cx" :cy="cy" @click="handleClick"></circle>
+        <circle :r="r" :cx="cx" :cy="cy" @click="handleClick" class="state-secondary"></circle>
     </g>
 </template>
 
 <style scoped>
-    circle {
+    circle.state-secondary {
         fill: #fff;
         stroke: #000;
     }
