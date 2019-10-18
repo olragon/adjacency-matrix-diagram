@@ -9,7 +9,7 @@
                     <p class="description">
                         - Input your room list, one room one line.<br>
                         - Your work will be auto saved in your local browser or you can download state file and load later.<br>
-                        - You want to read <a href="https://carolynjeanmatthews.com/2017/02/07/adjacency-matrix-decoded/">ADJACENCY MATRIX DECODED</a> by Carolyn Jean Matthews
+                        - You want to read <a href="https://carolyndaut.com/2017/02/07/adjacency-matrix-decoded/">ADJACENCY MATRIX DECODED</a> by Carolyn Jean Matthews
                     </p>
 
                     <div>
