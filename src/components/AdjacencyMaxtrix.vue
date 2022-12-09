@@ -13,6 +13,9 @@
                         - You want to read <a
                             href="https://carolynjeanmatthews.com/2017/02/07/adjacency-matrix-decoded/">ADJACENCY MATRIX
                             DECODED</a> by Carolyn Jean Matthews<br />
+                        - You want to read <a
+                            href="https://carolyndaut.com/2017/02/07/adjacency-matrix-decoded/">ADJACENCY MATRIX
+                            DECODED</a> by Carolyn Jean Matthews <br />
                         - <a href="https://github.com/olragon/adjacency-matrix-diagram">Open source</a>
                     </p>
 
