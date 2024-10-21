@@ -1,8 +1,4 @@
-import Vue from 'vue'
-import AdjacencyMaxtrix from './components/AdjacencyMaxtrix.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 
-Vue.config.productionTip = false
-
-new Vue({
-  render: h => h(AdjacencyMaxtrix)
-}).$mount('#app')
+createApp(App).mount("#app");
