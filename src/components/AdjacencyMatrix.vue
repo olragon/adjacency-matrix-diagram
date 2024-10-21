@@ -311,6 +311,8 @@ export default {
             return {
                 states: this.states,
                 rawRooms: this.rawRooms,
+                inactiveTextColor: this.inactiveTextColor,
+                activeTextColor: this.activeTextColor,
             };
         },
         svgSize() {
